@@ -1,4 +1,4 @@
-# nvidia_smi_exporter
+# smi_exporter
 
 nvidia-smi metrics exporter for Prometheus
 
@@ -9,10 +9,10 @@ nvidia-smi metrics exporter for Prometheus
 
 ## Run
 ```
-> ./smi_exporter [<port>]
+> ./smi_exporter  -web.listen-address=<IP>:<PORT> -web.telemetry-path=/<Metric_path>
 ```
 Default port is 9101
-
+Default metric path is /metrics
 
 ### localhost:9101/metrics
 
