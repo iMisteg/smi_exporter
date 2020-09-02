@@ -27,8 +27,13 @@ func metrics(response http.ResponseWriter, request *http.Request) {
         "--query-gpu=name,index,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used",
         "--format=csv,noheader,nounits").Output()
 
+//    if err != nil {
+//        fmt.Printf("%s\n", err)
+//        return
+//    }
     if err != nil {
         fmt.Printf("%s\n", err)
+        errorHandler(response, request, http.StatusNotFound)
         return
     }
 
@@ -36,10 +41,10 @@ func metrics(response http.ResponseWriter, request *http.Request) {
     csvReader.TrimLeadingSpace = true
     records, err := csvReader.ReadAll()
 
-    if err != nil {
-        fmt.Printf("%s\n", err)
-        return
-    }
+//    if err != nil {
+//       fmt.Printf("%s\n", err)
+//        return
+//    }
 
     metricList := []string {
         "temperature.gpu", "utilization.gpu",
@@ -56,6 +61,14 @@ func metrics(response http.ResponseWriter, request *http.Request) {
     }
 
     fmt.Fprintf(response, strings.Replace(result, ".", "_", -1))
+    
+}
+
+func errorHandler(response http.ResponseWriter, request *http.Request, status int) {
+    response.WriteHeader(status)
+    if status == http.StatusNotFound {
+        fmt.Fprint(response, "custom 404")
+    }
 }
 
 func init() {
